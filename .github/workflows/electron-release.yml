@@ -2,8 +2,8 @@ name: Electron Release Workflow
 
 on:
   push:
-    branches:
-      - main
+    branches: [ "master" ]
+  workflow_dispatch:
 
 jobs:
   release:
@@ -11,11 +11,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
@@ -33,5 +36,7 @@ jobs:
             dist/font-organizer-*.dmg
             dist/font-organizer-*.zip
           generate_release_notes: true
+          draft: false
+          prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
