@@ -1,19 +1,20 @@
 import React, { useState } from 'react';
-import { ChevronDown, ChevronRight, Tag } from 'lucide-react';
-import { FontCategory } from '../types';
-
-const LANGUAGE_CATEGORIES = ['ARABIC', 'CHINESE', 'JAPANESE', 'KOREAN', 'THAI', 'HEBREW', 'DEVANAGARI'];
+import { ChevronDown, ChevronRight, Tag, Globe, ChevronLeft } from 'lucide-react';
+import { FontCategory, CategoryType } from '../types';
 
 interface SidebarProps {
   categories: FontCategory[];
   onCategoryClick: (categoryName: string) => void;
   onRenameCategory: (oldName: string, newName: string) => void;
+  onToggleSidebar: () => void;
+  isOpen: boolean;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
   categories,
   onCategoryClick,
   onRenameCategory,
+  onToggleSidebar,
 }) => {
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
   const [renamingCategory, setRenamingCategory] = useState<string | null>(null);
@@ -31,7 +32,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   const handleRenameStart = (categoryName: string) => {
     setRenamingCategory(categoryName);
-    setNewCategoryName(categoryName.replace(/_/g, ' ').toLowerCase());
+    setNewCategoryName(categoryName);
   };
 
   const handleRenameComplete = () => {
@@ -51,15 +52,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
     }
   };
 
-  const isLanguageCategory = (categoryName: string) => {
-    return LANGUAGE_CATEGORIES.some(lang => 
-      categoryName.toUpperCase().includes(lang)
-    );
-  };
-
-  const regularCategories = categories.filter(cat => !isLanguageCategory(cat.name));
-  const languageCategories = categories.filter(cat => isLanguageCategory(cat.name));
-
   const formatCategoryName = (name: string) => {
     return name
       .split('_')
@@ -73,9 +65,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <div className="flex items-center gap-2">
           <button
             onClick={() => onCategoryClick(category.name)}
-            className="flex items-center gap-2 text-sm text-gray-700 hover:text-gray-900"
+            className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white"
           >
-            <Tag size={16} className="text-blue-500" />
+            {category.type === CategoryType.TAG ? (
+              <Tag size={16} className="text-blue-500 dark:text-blue-400" />
+            ) : (
+              <Globe size={16} className="text-green-500 dark:text-green-400" />
+            )}
             {renamingCategory === category.name ? (
               <input
                 type="text"
@@ -83,7 +79,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 onChange={(e) => setNewCategoryName(e.target.value)}
                 onKeyDown={handleKeyDown}
                 onBlur={handleRenameComplete}
-                className="text-sm border rounded px-1"
+                className="text-sm border rounded px-1 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                 autoFocus
               />
             ) : (
@@ -98,7 +94,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
         <button
           onClick={() => toggleCategory(category.name)}
-          className="text-gray-500 hover:text-gray-700"
+          className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
         >
           {expandedCategories.has(category.name) ? (
             <ChevronDown size={16} />
@@ -113,7 +109,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <button
               key={family.name}
               onClick={() => onCategoryClick(category.name)}
-              className="w-full flex items-center gap-2 px-2 py-1 text-sm text-gray-600 hover:bg-gray-100 rounded-md"
+              className="w-full flex items-center gap-2 px-2 py-1 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
             >
               <span>{family.name}</span>
             </button>
@@ -123,22 +119,38 @@ export const Sidebar: React.FC<SidebarProps> = ({
     </div>
   );
 
+  const tagCategories = categories.filter(cat => cat.type === CategoryType.TAG);
+  const languageCategories = categories.filter(cat => cat.type === CategoryType.LANGUAGE);
+
   return (
-    <div className="fixed left-0 top-0 w-64 bg-white border-r border-gray-200 h-screen overflow-y-auto">
+    <div className="fixed left-0 top-0 w-64 h-screen bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 overflow-y-auto">
+      {/* macOS window controls spacing */}
+      <div className="h-8" />
+      
       <div className="p-4">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Tags</h2>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+            Tags
+          </h3>
+          <button
+            onClick={onToggleSidebar}
+            className="p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          >
+            <ChevronLeft size={16} className="text-gray-600 dark:text-gray-300" />
+          </button>
+        </div>
         <div className="space-y-4">
-          {/* Regular Categories */}
+          {/* Tag Categories */}
           <div className="space-y-2">
-            {regularCategories.map(renderCategory)}
+            {tagCategories.map(renderCategory)}
           </div>
 
           {/* Language Categories */}
           {languageCategories.length > 0 && (
             <>
-              <div className="border-t border-gray-200 my-4"></div>
-              <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wider">
-                Language Fonts
+              <div className="border-t border-gray-200 dark:border-gray-700 my-4"></div>
+              <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                Languages
               </h3>
               <div className="space-y-2">
                 {languageCategories.map(renderCategory)}
