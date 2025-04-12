@@ -1,6 +1,6 @@
-# Hurafa Font Organizer
-**A modern, minimalistic font finder and organizer aided by AI.**
+# Hurafa: Font Organizer
 
+## The perfect font, every time.
 I hate searching for fonts to use in projects. Font Book is very unorganized and hard to use. I also hate the idea of downloading a font only to find out it's not what I want. Using AI, the goal of Hurafa is to make it easy to find the perfect font for your project. 
 
 ## Features
