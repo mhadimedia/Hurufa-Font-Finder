@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Font } from '../types';
-import { Tag } from 'lucide-react';
+import { Tag, X } from 'lucide-react';
 import { FontTagManager } from './FontTagManager';
+import { useStore } from '../store';
 
 const LANGUAGE_SAMPLES: Record<string, string> = {
   'ARABIC': 'الحياة جميلة',
@@ -28,6 +29,10 @@ export const FontCard: React.FC<FontCardProps> = ({
   allCategories,
   onUpdateFont,
 }) => {
+  const [isTagManagerOpen, setIsTagManagerOpen] = useState(false);
+  const tagManagerRef = useRef<HTMLDivElement>(null);
+  const { removeFont } = useStore();
+
   const mainFont = fonts[0];
 
   const isLanguageFont = Object.keys(LANGUAGE_SAMPLES).some(lang => 
@@ -60,17 +65,49 @@ export const FontCard: React.FC<FontCardProps> = ({
     return weight;
   };
 
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (tagManagerRef.current && !tagManagerRef.current.contains(event.target as Node)) {
+        setIsTagManagerOpen(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-      <div className="flex justify-between items-start mb-2">
-        <h3 className="font-semibold text-gray-900">{familyName}</h3>
-        <FontTagManager
-          font={mainFont}
-          allCategories={allCategories}
-          onUpdateTags={(font, newTags) => onUpdateFont(font, newTags)}
-        />
+    <div className="group relative bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 p-4">
+      <div className="flex items-center justify-between mb-2">
+        <h3 className="text-sm font-medium text-gray-900 truncate">{familyName}</h3>
+        <button
+          onClick={() => removeFont(familyName)}
+          className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-gray-400 hover:text-red-500"
+        >
+          <X size={16} />
+        </button>
       </div>
       
+      <div className="relative" ref={tagManagerRef}>
+        <button
+          onClick={() => setIsTagManagerOpen(!isTagManagerOpen)}
+          className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-700 transition-colors duration-200"
+        >
+          <Tag size={12} />
+          {allCategories.length > 0 ? allCategories.join(', ') : 'Add tags...'}
+        </button>
+        
+        {isTagManagerOpen && (
+          <div className="absolute z-10 mt-1 w-48 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 animate-fadeIn">
+            <FontTagManager
+              font={mainFont}
+              allCategories={allCategories}
+              onUpdateTags={(font, newTags) => onUpdateFont(font, newTags)}
+            />
+          </div>
+        )}
+      </div>
+
       <div className="mb-4">
         <p 
           className="text-lg"

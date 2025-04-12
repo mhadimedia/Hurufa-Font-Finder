@@ -18,6 +18,8 @@ I hate searching for fonts to use in projects. Font Book is very unorganized and
 - Cloud storage integration
 - Integration with Google Fonts and other font providers
 
-> If this seems cool, I'd love your support by starring the repo and [Buying me a Coffee](https://buymeacoffee.com/mhadi). It'll help me keep working on this project and many more :)
+---
+
+If this seems cool, I'd love your support by starring the repo and [Buying me a Coffee](https://buymeacoffee.com/mhadi). It'll help me keep working on this project and many more :)
 
 Questions, suggestions, or just want to chat? Drop a message on [Twitter](https://x.com/mhadifilms).
