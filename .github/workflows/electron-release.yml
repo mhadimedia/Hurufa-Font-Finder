@@ -24,14 +24,17 @@ jobs:
 
       - name: Get version
         id: get_version
-        run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          MAJOR_MINOR=$(echo $VERSION | cut -d. -f1,2)
+          echo "version=v$MAJOR_MINOR" >> $GITHUB_OUTPUT
 
       - name: Create tag
         uses: mathieudutour/github-tag-action@v6.1
         id: tag_version
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          custom_tag: v${{ steps.get_version.outputs.version }}
+          custom_tag: ${{ steps.get_version.outputs.version }}
 
       - name: Build
         run: npm run electron:build
