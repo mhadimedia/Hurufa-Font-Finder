@@ -1,7 +1,7 @@
 export enum CategoryType {
-  TAG = 'tag',
-  LANGUAGE = 'language',
-  SEARCH = 'search',
+  TAG = 'Collections',
+  LANGUAGE = 'Language',
+  SEARCH = 'Search',
   // Add more category types here in the future
 }
 
@@ -19,8 +19,8 @@ export interface Font {
 export interface FontFamily {
   name: string;
   fonts: Font[];
-  tags: string[];
-  language: string;
+  tags?: string[];
+  language?: string;
 }
 
 export interface FontCategory {

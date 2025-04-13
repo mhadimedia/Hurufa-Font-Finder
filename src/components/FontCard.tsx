@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { Font } from '../types';
-import { Tag, Globe, MoreVertical, Copy, FolderInput, Info, Move, Download } from 'lucide-react';
+import { Globe, MoreVertical, Copy, FolderInput, Info, Move, Download, AppWindow, ChevronDown, Layers, Folder } from 'lucide-react';
 import { FontTagManager } from './FontTagManager';
 import { useFontStore } from '../store';
+import { FontCollectionManager } from './FontCollectionManager';
 
 const useClickOutside = (ref: React.RefObject<HTMLElement>, handler: () => void) => {
   useEffect(() => {
@@ -44,7 +45,7 @@ interface FontCardProps {
   familyName: string;
   category: string;
   allCategories: string[];
-  onUpdateFont: (font: Font, newTags: string[], newLanguage: string) => void;
+  onUpdateFont: (font: Font, newCollections: string[], newLanguage: string) => void;
   viewMode?: 'grid' | 'stack';
   onShowDetails: () => void;
 }
@@ -71,6 +72,8 @@ export function FontCard({ fonts, familyName, category, allCategories, onUpdateF
   const languageManagerRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
+  const [showCollectionManager, setShowCollectionManager] = useState<string | null>(null);
+  const collectionManagerRef = useRef<HTMLDivElement>(null);
 
   const sortedFonts = useMemo(() => {
     const weightMap: { [key: string]: number } = {
@@ -182,6 +185,7 @@ export function FontCard({ fonts, familyName, category, allCategories, onUpdateF
 
   useClickOutside(tagManagerRef, () => setIsTagManagerOpen(false));
   useClickOutside(languageManagerRef, () => setIsLanguageManagerOpen(false));
+  useClickOutside(collectionManagerRef, () => setShowCollectionManager(null));
 
   const handleCardClick = (e: React.MouseEvent) => {
     if ((e.target as HTMLElement).closest('button, input, a, .no-drag')) return;
@@ -228,6 +232,11 @@ export function FontCard({ fonts, familyName, category, allCategories, onUpdateF
     setActiveFont((prevFont: Font | null) => (prevFont === font ? null : font));
   }, []);
 
+  const handleUpdateCollection = (font: Font, newCollections: string[]) => {
+    onUpdateFont(font, newCollections, font.language || '');
+    setShowCollectionManager(null);
+  };
+
   const DropdownMenu = () => {
     return (
       <div className="absolute right-0 mt-1 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 animate-fadeIn z-10">
@@ -264,6 +273,7 @@ export function FontCard({ fonts, familyName, category, allCategories, onUpdateF
     <div 
       ref={cardRef}
       data-font-family={familyName}
+      data-font-id={activeFont?.postscriptName || activeFont?.fullName}
       className={`font-card group relative bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 ${
         viewMode === 'grid' ? 'p-6 w-full h-full flex flex-col' : 
         'p-4 w-full flex flex-col'
@@ -290,6 +300,9 @@ export function FontCard({ fonts, familyName, category, allCategories, onUpdateF
         <h3 
           className="text-lg font-medium text-gray-900 dark:text-gray-100 truncate flex-1 min-w-0"
           style={{
+            fontFamily: activeFont || defaultFont ? (activeFont || defaultFont).postscriptName || (activeFont || defaultFont).family : 'inherit',
+            fontWeight: getFontWeight((activeFont || defaultFont)?.style || 'regular'),
+            fontStyle: (activeFont || defaultFont)?.style.toLowerCase().includes('italic') ? 'italic' : 'normal',
             fontFamily: defaultFont.postscriptName || defaultFont.family,
             fontWeight: getFontWeight(defaultFont.style),
             fontStyle: defaultFont.style.toLowerCase().includes('italic') ? 'italic' : 'normal',
@@ -319,25 +332,25 @@ export function FontCard({ fonts, familyName, category, allCategories, onUpdateF
             }}
             className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors duration-200 max-w-full truncate"
           >
-            <Tag size={12} className="flex-shrink-0" />
-            <span className="truncate">{fonts[0].tags?.length ? fonts[0].tags.join(', ') : 'Add tags...'}</span>
+            <Folder size={12} className="flex-shrink-0" />
+            <span className="truncate">{fonts[0].tags?.length ? fonts[0].tags.join(', ') : 'Add to collections...'}</span>
           </button>
           
           {isTagManagerOpen && fonts.length > 0 && (
             <div className="fixed z-20 mt-1 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 animate-fadeIn" style={{ top: tagManagerRef.current?.getBoundingClientRect().bottom, left: tagManagerRef.current?.getBoundingClientRect().left }}>
-              <FontTagManager
+              <FontCollectionManager
                 font={fonts[0]}
                 allCategories={allCategories.filter(cat => !Object.keys(LANGUAGE_SAMPLES).includes(cat))}
-                onUpdateTags={(font, newTags) => {
+                onUpdateCollection={(font, newCollections) => {
                   const currentTags = fonts[0].tags || [];
-                  const addedTag = newTags.find(tag => !currentTags.includes(tag));
-                  const updatedAllCategories = addedTag && !allCategories.includes(addedTag)
-                    ? [...allCategories, addedTag]
+                  const addedCollection = newCollections.find(collection => !currentTags.includes(collection));
+                  const updatedAllCategories = addedCollection && !allCategories.includes(addedCollection)
+                    ? [...allCategories, addedCollection]
                     : allCategories;
                   
-                  onUpdateFont(font, newTags, font.language || 'English');
+                  onUpdateFont(font, newCollections, font.language || 'English');
                   
-                  if (addedTag && !allCategories.includes(addedTag)) {
+                  if (addedCollection && !allCategories.includes(addedCollection)) {
                     // Re-categorization logic might be needed here or in App.tsx
                   }
 

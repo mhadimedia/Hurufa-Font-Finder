@@ -2,6 +2,88 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Basic body styling */
+body {
+  @apply font-sans antialiased;
+  overscroll-behavior: none; /* Prevent pull-to-refresh */
+  /* Hide default scrollbars */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+}
+
+body::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
+
+/* Specific scrollbar hiding for app containers if needed */
+/* Adjust selectors if your structure is different */
+.h-screen.overflow-y-auto::-webkit-scrollbar {
+  display: none;
+}
+.h-screen.overflow-y-auto {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+/* Specific scrollbar hiding for app containers */
+/* Target the specific divs by class or structure if needed */
+.sidebar-container::-webkit-scrollbar,
+.main-content-container::-webkit-scrollbar {
+  display: none;
+}
+
+.sidebar-container,
+.main-content-container {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE 10+ */
+}
+
+/* Make body non-selectable when dragging */
+body.dragging {
+  user-select: none;
+}
+
+/* Custom scrollbar styles (Optional - if you want styled scrollbars) */
+/* 
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(156, 163, 175, 0.5); 
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(107, 114, 128, 0.7); 
+}
+*/
+
+/* App region drag styles */
+.app-drag-region {
+  -webkit-app-region: drag;
+}
+
+/* Prevent buttons inside drag region from being draggable */
+.app-drag-region button {
+  -webkit-app-region: no-drag;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out;
+}
+
 /* Prevent text selection globally */
 * {
   -webkit-user-select: none;
@@ -26,12 +108,6 @@
   user-select: none !important;
 }
 
-/* Window drag region */
-.app-drag-region {
-  -webkit-app-region: drag;
-  app-region: drag;
-}
-
 /* Modern focus styles for inputs and selects */
 input:focus, textarea:focus, select:focus {
   @apply outline-none ring-2 ring-blue-500 ring-opacity-50 border-blue-500;
@@ -48,6 +124,11 @@ input, textarea, select {
   @apply focus:ring-blue-500 focus:border-blue-500;
 }
 
+/* Remove orange outline during screenshots */
+* {
+  outline-color: transparent !important;
+}
+
 /* Fix selection color */
 .font-card.selected,
 .font-card:has([aria-selected="true"]),
@@ -56,10 +137,4 @@ input, textarea, select {
   border-color: rgb(59, 130, 246) !important;
   outline-color: rgb(59, 130, 246) !important;
   box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3) !important;
-}
-
-/* Remove any orange outlines and rings */
-*:focus, *:focus-visible {
-  @apply outline-none ring-blue-500 ring-opacity-50 !important;
-  outline-color: rgb(59, 130, 246) !important;
 }

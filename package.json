@@ -1,7 +1,7 @@
 {
   "name": "Hurufa",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "commonjs",
   "description": "The perfect font, every time.",
   "author": "Muhammad Hadi Yusufali",
@@ -42,6 +42,7 @@
     "concurrently": "^8.2.2",
     "electron": "^29.1.0",
     "electron-builder": "^24.9.1",
+    "esbuild": "^0.25.0",
     "eslint": "^9.12.0",
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.5",
@@ -50,7 +51,7 @@
     "sharp": "^0.34.1",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.2.2",
-    "vite": "^5.1.0",
+    "vite": "^6.2.6",
     "vite-electron-plugin": "^0.8.3"
   },
   "build": {
