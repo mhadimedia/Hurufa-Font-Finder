@@ -1,11 +1,11 @@
-version: 1.0.1
+version: 1.1.1
 files:
-  - url: Font-Organizer-1.0.1-arm64-mac.zip
-    sha512: 89GgVrxsmWy92whoNWXkUM+8e26o8tJXpbuGXf4HU5/oLAMzom0a2HOW65LX4atiWXnW9ETFZhn0zzwYU7rz/A==
-    size: 97581191
-  - url: Font-Organizer-1.0.1-arm64.dmg
-    sha512: w77Wd8B4yLLhBcsT0StbOTnvvoAdPJsSTM7AmkzAU5C9BbXgF+82p96CcB1QvQvkM4stvBoEYiy8O9NSehCfdg==
-    size: 100970970
-path: Font-Organizer-1.0.1-arm64-mac.zip
-sha512: 89GgVrxsmWy92whoNWXkUM+8e26o8tJXpbuGXf4HU5/oLAMzom0a2HOW65LX4atiWXnW9ETFZhn0zzwYU7rz/A==
-releaseDate: '2025-04-13T04:12:01.649Z'
+  - url: Hurufa-1.1.1-arm64.zip
+    sha512: xPDbjNKnHz42PdCZRp2l144bidkwTicbuvHDIOQ3Gp1YU2Ze37gJPwNWDo3MRsvxehBtopm40VrSzzHjPI6YwQ==
+    size: 99433386
+  - url: Hurufa-1.1.1-arm64.dmg
+    sha512: jsL/bPqlkdGIZtgI9n+21hajlQxMQlZ7PxApyUF9xBoLPL6StFc18TEfXwdBJkq8OjQYdnC1qXNkM4IFONsfYw==
+    size: 104868955
+path: Hurufa-1.1.1-arm64.zip
+sha512: xPDbjNKnHz42PdCZRp2l144bidkwTicbuvHDIOQ3Gp1YU2Ze37gJPwNWDo3MRsvxehBtopm40VrSzzHjPI6YwQ==
+releaseDate: '2025-04-13T21:05:49.988Z'
