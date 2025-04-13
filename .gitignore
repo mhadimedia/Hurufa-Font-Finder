@@ -35,10 +35,16 @@ yarn-error.log*
 
 # Electron-builder output
 dist_electron/
-release/
+release/*
 !release/builder-effective-config.yaml
 !release/latest-mac.yml
+release/mac-*/
+release/*.dmg
+release/*.zip
+release/*.blockmap
+release/win-*/
+release/linux-*/
 
 # Font files
-.otf
-.ttf
+*.otf
+*.ttf
