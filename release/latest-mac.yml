@@ -1,11 +1,11 @@
 version: 1.1.0
 files:
   - url: Hurufa-1.1.0-arm64.zip
-    sha512: +BOo/eUV5ByCX1lwgC+RLBKkBuYM9esey1WkBiqu6RdEIzgCUUuROufH9QlQavpT2C+rIRJTOeyH0y32IgPACw==
-    size: 99433299
+    sha512: IAHXOsS8Kff5uZBj320xQhtlaqZkOai+0NQ3z5K7yF1wS5ly7u2cvSlaj81XCin7WzBhyOf/ogz9IyQWnwgsNg==
+    size: 99433550
   - url: Hurufa-1.1.0-arm64.dmg
-    sha512: VQfLJQeuyl+a+0OH7kBDf8kIZ+JrA5hht6csIDa09Uix+do+FlgMQHq2wD1QyZn6IwRP2Af0PY/S1ZqHf4/nlw==
-    size: 104869078
+    sha512: EVN/Msl4p3cZxsrYHYx5HWM4QKwGXwWywmQNA/lm4UL0zxbnAgwqYTWbcQB6zRVL5852fyqkb3MP/7KAbhcsHA==
+    size: 104871816
 path: Hurufa-1.1.0-arm64.zip
-sha512: +BOo/eUV5ByCX1lwgC+RLBKkBuYM9esey1WkBiqu6RdEIzgCUUuROufH9QlQavpT2C+rIRJTOeyH0y32IgPACw==
-releaseDate: '2025-04-13T21:30:07.975Z'
+sha512: IAHXOsS8Kff5uZBj320xQhtlaqZkOai+0NQ3z5K7yF1wS5ly7u2cvSlaj81XCin7WzBhyOf/ogz9IyQWnwgsNg==
+releaseDate: '2025-04-13T21:47:11.152Z'

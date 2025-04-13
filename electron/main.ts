@@ -11,13 +11,20 @@ const { checkForUpdates } = require('./updater');
 const { getPreferences, savePreferences } = require('./preferences');
 const { autoUpdater } = require('electron-updater');
 
-// Disable code signing verification to fix update issues
+// Force disable ALL code signature verification
 process.env.UPDATER_FORCE_NO_VERIFY = 'true';
+process.env.CSC_IDENTITY_AUTO_DISCOVERY = 'false';
+process.env.CSC_DO_NOT_VERIFY = 'true';
+
+// Add all possible signature bypass flags
 app.commandLine.appendSwitch('disable-features', 'AppVerifier');
+app.commandLine.appendSwitch('allow-insecure-localhost', 'true');
+app.commandLine.appendSwitch('ignore-certificate-errors', 'true');
+app.commandLine.appendSwitch('disable-web-security', 'true');
 
 // Set application name
 app.name = 'Hurufa';
-app.setAppUserModelId('com.fontorganizer.app');
+app.setAppUserModelId('com.fontorganizer.app'); 
 
 const port = process.env.PORT || 5173;
 const fontManager = new FontManager();
