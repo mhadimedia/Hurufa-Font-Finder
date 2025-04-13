@@ -5,6 +5,13 @@ import { getPreferences, savePreferences } from './preferences';
 // Configure autoUpdater
 autoUpdater.autoDownload = false;
 autoUpdater.autoInstallOnAppQuit = true;
+autoUpdater.allowDowngrade = true;
+autoUpdater.allowPrerelease = false;
+
+// Disable code signature verification to fix update issues
+autoUpdater.disableWebInstaller = false;
+autoUpdater.requiresUpdateClientCertificate = false;
+autoUpdater.isUpdaterActive = () => true;
 
 // Load saved preferences
 const preferences = getPreferences();

@@ -9,6 +9,11 @@ const { homedir } = require('os');
 const { FontManager } = require('./fontManager');
 const { checkForUpdates } = require('./updater');
 const { getPreferences, savePreferences } = require('./preferences');
+const { autoUpdater } = require('electron-updater');
+
+// Disable code signing verification to fix update issues
+process.env.UPDATER_FORCE_NO_VERIFY = 'true';
+app.commandLine.appendSwitch('disable-features', 'AppVerifier');
 
 const port = process.env.PORT || 5173;
 const fontManager = new FontManager();

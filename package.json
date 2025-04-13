@@ -67,7 +67,10 @@
       "hardenedRuntime": true,
       "gatekeeperAssess": false,
       "entitlements": "build/entitlements.mac.plist",
-      "entitlementsInherit": "build/entitlements.mac.plist"
+      "entitlementsInherit": "build/entitlements.mac.plist",
+      "artifactName": "${productName}-${version}-${arch}.${ext}",
+      "strictVerify": false,
+      "identity": null
     },
     "win": {
       "target": [
