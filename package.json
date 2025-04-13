@@ -71,9 +71,6 @@
       "artifactName": "${productName}-${version}-${arch}.${ext}",
       "strictVerify": false,
       "identity": null,
-      "asarUnpack": "**/node_modules/**/*.node",
-      "minimumSystemVersion": "10.13.0",
-      "darkModeSupport": true,
       "notarize": false
     },
     "win": {
@@ -101,11 +98,6 @@
       "provider": "github",
       "owner": "mhadimedia",
       "repo": "Hurufa-Font-Finder"
-    },
-    "forceCodeSigning": false,
-    "afterSign": null,
-    "asar": {
-      "smartUnpack": true
     }
   }
 }

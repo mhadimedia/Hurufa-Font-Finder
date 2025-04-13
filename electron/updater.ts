@@ -2,10 +2,6 @@ import { autoUpdater } from 'electron-updater';
 import { app, dialog } from 'electron';
 import { getPreferences, savePreferences } from './preferences';
 
-// Force disable all code signature checking
-process.env.UPDATER_ALLOW_PRERELEASE = 'true';
-process.env.UPDATER_FORCE_NO_VERIFY = 'true';
-
 // Configure autoUpdater
 autoUpdater.autoDownload = false;
 autoUpdater.autoInstallOnAppQuit = true;
@@ -24,21 +20,6 @@ autoUpdater.logger = console;
 autoUpdater.verifyUpdateCodeSignature = false;
 // @ts-ignore
 autoUpdater.signatureVerificationDisabled = true;
-
-// Override isVerificationDisabled method
-const originalPublisher = autoUpdater.clientPromise;
-if (originalPublisher) {
-  // @ts-ignore
-  originalPublisher.then(client => {
-    // @ts-ignore
-    if (client.httpExecutor && client.httpExecutor.isVerificationDisabled) {
-      // @ts-ignore
-      const originalIsVerificationDisabled = client.httpExecutor.isVerificationDisabled;
-      // @ts-ignore
-      client.httpExecutor.isVerificationDisabled = () => true;
-    }
-  }).catch(err => console.error('Error overriding isVerificationDisabled:', err));
-}
 
 // Load saved preferences
 const preferences = getPreferences();
