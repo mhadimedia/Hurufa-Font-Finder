@@ -69,7 +69,12 @@
       "entitlements": "build/entitlements.mac.plist",
       "entitlementsInherit": "build/entitlements.mac.plist",
       "artifactName": "${productName}-${version}-${arch}.${ext}",
-      "strictVerify": false
+      "strictVerify": false,
+      "identity": null,
+      "asarUnpack": [
+        "**/*.node",
+        "**/node_modules/**/*.node"
+      ]
     },
     "win": {
       "target": [

@@ -10,6 +10,7 @@ autoUpdater.allowPrerelease = false;
 
 // Disable code signature verification to fix update issues
 autoUpdater.disableWebInstaller = false;
+// @ts-ignore - property exists but not in types
 autoUpdater.requiresUpdateClientCertificate = false;
 autoUpdater.isUpdaterActive = () => true;
 

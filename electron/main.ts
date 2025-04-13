@@ -13,7 +13,9 @@ const { autoUpdater } = require('electron-updater');
 
 // Disable code signing verification to fix update issues
 process.env.UPDATER_FORCE_NO_VERIFY = 'true';
+process.env.CSC_IDENTITY_AUTO_DISCOVERY = 'false';
 app.commandLine.appendSwitch('disable-features', 'AppVerifier');
+app.commandLine.appendSwitch('no-sandbox');
 
 // Set application name
 app.name = 'Hurufa';
