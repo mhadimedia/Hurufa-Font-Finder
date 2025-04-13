@@ -50,20 +50,7 @@ jobs:
             release/Hurufa-*.dmg
             release/Hurufa-*.zip
             release/latest*.yml
-          body: |
-            - Created a basic font organizer that has all the features of common font apps
-            - Implemented a modern theme with dark mode, keyboard shortcuts, and general responsiveness inspired by Google Photos and Finder
-            - Added customization for font sizing, spacing, colors, and content
-            - Introduced Collections, a way to sort and organize fonts
-            - Introduced the ability to select one or multiple fonts to copy their names, label, and export 
-            - Added a font information page with detailed visualizations for each individual font
-            - Made the app responsive
-            - Added a basic font search feature, creating a structure for more adavanced AI-powered searches in the future
-            - Added grid and stack views to preview fonts in multiple ways
-            - Added support for 30 of the most popular languages
-            - Made the sidebar collapsible and implemented the ability to change it's width
-            - Implemented previewing fonts by weight through easy to use buttons
-          generate_release_notes: false
+          generate_release_notes: true
           draft: false
           prerelease: false
         env:

@@ -15,6 +15,10 @@ const { autoUpdater } = require('electron-updater');
 process.env.UPDATER_FORCE_NO_VERIFY = 'true';
 app.commandLine.appendSwitch('disable-features', 'AppVerifier');
 
+// Set application name
+app.name = 'Hurufa';
+app.setAppUserModelId('com.hurufa.fontfinder');
+
 const port = process.env.PORT || 5173;
 const fontManager = new FontManager();
 

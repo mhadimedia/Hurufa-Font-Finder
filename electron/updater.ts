@@ -13,6 +13,14 @@ autoUpdater.disableWebInstaller = false;
 autoUpdater.requiresUpdateClientCertificate = false;
 autoUpdater.isUpdaterActive = () => true;
 
+// Critical settings to fix update signature errors on macOS
+autoUpdater.forceDevUpdateConfig = true;
+autoUpdater.logger = console;
+// @ts-ignore - these properties exist but might not be in the types
+autoUpdater.verifyUpdateCodeSignature = false;
+// @ts-ignore
+autoUpdater.signatureVerificationDisabled = true;
+
 // Load saved preferences
 const preferences = getPreferences();
 

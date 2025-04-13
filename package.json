@@ -55,7 +55,7 @@
     "vite-electron-plugin": "^0.8.3"
   },
   "build": {
-    "appId": "com.fontorganizer.app",
+    "appId": "com.hurufa.fontfinder",
     "productName": "Hurufa",
     "mac": {
       "category": "public.app-category.utilities",
@@ -70,7 +70,11 @@
       "entitlementsInherit": "build/entitlements.mac.plist",
       "artifactName": "${productName}-${version}-${arch}.${ext}",
       "strictVerify": false,
-      "identity": null
+      "identity": null,
+      "asarUnpack": "**/node_modules/**/*.node",
+      "minimumSystemVersion": "10.13.0",
+      "darkModeSupport": true,
+      "notarize": false
     },
     "win": {
       "target": [
