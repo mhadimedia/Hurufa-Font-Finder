@@ -47,8 +47,9 @@ jobs:
         with:
           tag_name: ${{ steps.tag_version.outputs.new_tag }}
           files: |
-            release/Font Organizer-*.dmg
-            release/Font Organizer-*.zip
+            release/Hurufa-*.dmg
+            release/Hurufa-*.zip
+            release/latest*.yml
           body: |
             - Created a basic font organizer that has all the features of common font apps
             - Implemented a modern theme with dark mode, keyboard shortcuts, and general responsiveness inspired by Google Photos and Finder
