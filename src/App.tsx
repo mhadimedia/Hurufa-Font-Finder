@@ -380,6 +380,7 @@ function App() {
         setActiveFilterValue(null);
         // You could alternatively implement a special view just for languages here
       }
+      // When clicking main header, don't change collapse state
     } else {
       // Normal category click (specific tag or language)
       if (type === CategoryType.TAG) {
@@ -388,9 +389,14 @@ function App() {
         setFilterType('language');
       }
       setActiveFilterValue(categoryName);
+      
+      // Expand only the clicked category
+      setCollapsedSections(prev => {
+        const newCollapsed = new Set(prev);
+        newCollapsed.delete(categoryName); // Remove from collapsed set to expand it
+        return newCollapsed;
+      });
     }
-    
-    setCollapsedSections(new Set()); // Expand the clicked category
   };
 
   const toggleSection = (categoryName: string) => {

@@ -71,7 +71,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <button
             onClick={() => onCategoryClick(category.name, category.type)}
             onMouseUp={(e) => e.currentTarget.blur()}
-            className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white py-1 rounded"
+            className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white py-1 rounded focus:outline-none"
           >
             {category.type === CategoryType.TAG ? (
               <Tag size={16} className="text-blue-500 dark:text-blue-400" />
@@ -101,7 +101,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <button
           onClick={() => toggleSection(category.name)}
           onMouseUp={(e) => e.currentTarget.blur()}
-          className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 p-1 rounded"
+          className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 p-1 rounded focus:outline-none"
         >
           {collapsedSections.has(category.name) ? (
             <ChevronRight size={16} />
@@ -144,7 +144,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <button
             onClick={() => setIsSettingsExpanded(!isSettingsExpanded)}
             onMouseUp={(e) => e.currentTarget.blur()}
-            className="p-1.5 rounded-md hover:bg-gray-100/10 transition-colors"
+            className="p-1.5 rounded-md hover:bg-gray-100/10 transition-colors focus:outline-none"
           >
             {isSettingsExpanded ? (
               <ChevronDown size={16} className="text-white" />
@@ -194,7 +194,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   onDoubleClick={() => setFontSize(24)}
                   onChange={(e) => setFontSize(parseInt(e.target.value))}
                   onMouseUp={(e) => e.currentTarget.blur()}
-                  className="w-full h-1.5 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-blue-500"
+                  className="w-full h-1.5 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-blue-500 focus:outline-none"
                 />
               </div>
 
@@ -234,7 +234,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   onDoubleClick={() => setLineHeight(100)}
                   onChange={(e) => setLineHeight(parseInt(e.target.value))}
                   onMouseUp={(e) => e.currentTarget.blur()}
-                  className="w-full h-1.5 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-blue-500"
+                  className="w-full h-1.5 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-blue-500 focus:outline-none"
                 />
               </div>
 
@@ -254,7 +254,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   onDoubleClick={() => setLetterSpacing(0)}
                   onChange={(e) => setLetterSpacing(parseInt(e.target.value))}
                   onMouseUp={(e) => e.currentTarget.blur()}
-                  className="w-full h-1.5 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-blue-500"
+                  className="w-full h-1.5 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-blue-500 focus:outline-none"
                 />
               </div>
             </div>
