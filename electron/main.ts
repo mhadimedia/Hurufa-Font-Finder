@@ -17,7 +17,7 @@ app.commandLine.appendSwitch('disable-features', 'AppVerifier');
 
 // Set application name
 app.name = 'Hurufa';
-app.setAppUserModelId('com.hurufa.fontfinder');
+app.setAppUserModelId('com.fontorganizer.app');
 
 const port = process.env.PORT || 5173;
 const fontManager = new FontManager();
