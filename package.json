@@ -16,7 +16,7 @@
     "electron:dev": "concurrently \"npm run dev\" \"electron .\"",
     "electron:build": "npm run build && electron-builder",
     "postinstall": "electron-builder install-app-deps",
-    "generate-icons": "node scripts/generate-icons.js",
+    "generate-icons": "node scripts/generate-icons.mjs",
     "publish": "electron-builder -p always"
   },
   "dependencies": {
@@ -55,13 +55,14 @@
   },
   "build": {
     "appId": "com.fontorganizer.app",
-    "productName": "Font Organizer",
+    "productName": "Hurufa",
     "mac": {
       "category": "public.app-category.utilities",
       "target": [
         "dmg",
         "zip"
       ],
+      "icon": "src/assets/icons/icon.icns",
       "hardenedRuntime": true,
       "gatekeeperAssess": false,
       "entitlements": "build/entitlements.mac.plist",
@@ -71,7 +72,8 @@
       "target": [
         "nsis",
         "zip"
-      ]
+      ],
+      "icon": "src/assets/icons/icon.ico"
     },
     "linux": {
       "target": [
