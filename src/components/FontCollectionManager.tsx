@@ -1,68 +1,76 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { X, Plus, Folder } from 'lucide-react';
+import { X, Plus } from 'lucide-react';
 import { useFontStore } from '../store';
 import { Font } from '../types';
 
-interface FontCollectionManagerProps {
+interface FontTagManagerProps {
   font: Font;
   allCategories: string[];
-  onUpdateCollection: (font: Font, newCollections: string[]) => void;
+  onUpdateTags: (font: Font, newTags: string[]) => void;
 }
 
-export function FontCollectionManager({ font, allCategories, onUpdateCollection }: FontCollectionManagerProps) {
-  const [newCollection, setNewCollection] = useState('');
+export function FontTagManager({ font, allCategories, onUpdateTags }: FontTagManagerProps) {
+  const [newTag, setNewTag] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const currentCollections = font.tags || [];
+  const currentTags = font.tags || [];
 
-  const handleAddCollection = (collectionToAdd: string) => {
-    const trimmedCollection = collectionToAdd.trim();
-    if (trimmedCollection && !currentCollections.includes(trimmedCollection)) {
-      const updatedCollections = [...currentCollections, trimmedCollection];
-      onUpdateCollection(font, updatedCollections);
-      setNewCollection('');
+  const handleAddTag = (tagToAdd: string) => {
+    const trimmedTag = tagToAdd.trim();
+    if (trimmedTag && !currentTags.includes(trimmedTag)) {
+      const updatedTags = [...currentTags, trimmedTag];
+      onUpdateTags(font, updatedTags);
+      setNewTag('');
+      // Explicitly hide suggestions after adding
       setShowSuggestions(false); 
-    } else if (trimmedCollection && currentCollections.includes(trimmedCollection)) {
-      setNewCollection('');
+    } else if (trimmedTag && currentTags.includes(trimmedTag)) {
+      // If tag exists but user tried adding again, just clear/hide
+      setNewTag('');
       setShowSuggestions(false);
     }
   };
 
-  const handleRemoveCollection = (collectionToRemove: string) => {
-    const updatedCollections = currentCollections.filter(tag => tag !== collectionToRemove);
-    onUpdateCollection(font, updatedCollections);
+  const handleRemoveTag = (tagToRemove: string) => {
+    const updatedTags = currentTags.filter(tag => tag !== tagToRemove);
+    onUpdateTags(font, updatedTags);
   };
 
+  // Filter suggestions based on input and exclude already selected tags
   const getSuggestions = () => {
-    const input = newCollection.toLowerCase();
+    const input = newTag.toLowerCase();
     
-    const availableCollections = allCategories
-      .filter(collection => !currentCollections.includes(collection))
-      .filter(collection => collection.toLowerCase().includes(input))
-      .filter(collection => collection !== 'Uncategorized');
+    // Filter available tags based on input and current tags
+    const availableTags = allCategories
+      .filter(tag => !currentTags.includes(tag))
+      .filter(tag => tag.toLowerCase().includes(input))
+      .filter(tag => tag !== 'Uncategorized'); // Don't show Uncategorized as an option
 
+    // Group tags into predefined categories
     const suggestions = [];
 
-    if (availableCollections.length > 0) {
+    // Add existing sidebar tags
+    if (availableTags.length > 0) {
       suggestions.push({
-        category: 'Available Collections',
-        tags: availableCollections
+        category: 'Available Tags',
+        tags: availableTags
       });
     }
 
-    if (newCollection.trim() && !allCategories.some(collection => 
-      collection.toLowerCase() === newCollection.trim().toLowerCase()
+    // Allow adding new custom tags if the input doesn't match any existing tags
+    if (newTag.trim() && !allCategories.some(tag => 
+      tag.toLowerCase() === newTag.trim().toLowerCase()
     )) {
       suggestions.push({
-        category: 'Create New Collection',
-        tags: [newCollection.trim()]
+        category: 'Create New Tag',
+        tags: [newTag.trim()]
       });
     }
 
     return suggestions;
   };
 
+  // Close suggestions when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
@@ -78,14 +86,14 @@ export function FontCollectionManager({ font, allCategories, onUpdateCollection 
   return (
     <div className="p-2 space-y-2" ref={containerRef}>
       <div className="flex flex-wrap gap-1">
-        {currentCollections.map((collection) => (
+        {currentTags.map((tag) => (
           <span
-            key={collection}
+            key={tag}
             className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
           >
-            {collection}
+            {tag}
             <button
-              onClick={() => handleRemoveCollection(collection)}
+              onClick={() => handleRemoveTag(tag)}
               className="ml-1 text-blue-600 hover:text-blue-800"
             >
               <X size={12} />
@@ -98,22 +106,33 @@ export function FontCollectionManager({ font, allCategories, onUpdateCollection 
         <div className="flex gap-1">
           <input
             type="text"
-            value={newCollection}
+            value={newTag}
             onChange={(e) => {
-              setNewCollection(e.target.value);
+              setNewTag(e.target.value);
               setShowSuggestions(true);
             }}
             onFocus={() => setShowSuggestions(true)}
             onKeyPress={(e) => {
-              if (e.key === 'Enter' && newCollection.trim()) {
-                e.preventDefault();
-                handleAddCollection(newCollection);
+              if (e.key === 'Enter' && newTag.trim()) {
+                e.preventDefault(); // Prevent potential form submission
+                handleAddTag(newTag); // This will now clear input and hide suggestions
+                // No need to set state here, handleAddTag does it
               }
             }}
-            placeholder="Add collection..."
-            className="w-full px-2 py-1 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:text-white"
+            placeholder="Add tag..."
+            className="flex-1 px-2 py-1 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:text-white"
             ref={inputRef}
           />
+          <button
+            onClick={() => {
+              if (newTag.trim()) {
+                handleAddTag(newTag); // This will now clear input and hide suggestions
+              }
+            }}
+            className="p-1 text-blue-600 hover:text-blue-800"
+          >
+            <Plus size={16} />
+          </button>
         </div>
 
         {showSuggestions && (
@@ -127,10 +146,10 @@ export function FontCollectionManager({ font, allCategories, onUpdateCollection 
                   {tags.map((suggestion) => (
                     <button
                       key={suggestion}
-                      onClick={() => handleAddCollection(suggestion)}
+                      onClick={() => handleAddTag(suggestion)}
                       className="w-full text-left px-2 py-1 text-sm text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-gray-600 focus:bg-blue-50 dark:focus:bg-gray-600 focus:outline-none rounded"
                     >
-                      {category === 'Create New Collection' ? `Create "${suggestion}"` : suggestion}
+                      {category === 'Create New Tag' ? `Create "${suggestion}"` : suggestion}
                     </button>
                   ))}
                 </div>

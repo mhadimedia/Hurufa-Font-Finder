@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useRef } from 'react';
-import { Move, Download, Copy, Tag, Globe, ChevronDown, Folder, AppWindow, Layers } from 'lucide-react';
+import { Move, Download, Copy, Tag, Globe, ChevronDown } from 'lucide-react';
 import { useFontStore } from '../store';
-import { FontCollectionManager } from './FontCollectionManager';
+import { FontTagManager } from './FontTagManager';
 import { Font } from '../types';
 
 // Define useClickOutside hook locally if not imported from a shared location
@@ -43,25 +43,27 @@ const LANGUAGE_SAMPLES: Record<string, string> = {
 };
 
 interface SelectionMenuBarProps {
-  allCategories: string[]; // Now represents collection names
+  // categories prop is no longer needed as FontTagManager gets allCategories
+  allCategories: string[];
 }
 
 export const SelectionMenuBar: React.FC<SelectionMenuBarProps> = ({ allCategories }) => {
-  const [showCollectionManager, setShowCollectionManager] = useState(false); // Renamed state
+  const [showTagManager, setShowTagManager] = useState(false);
   const [showLanguageMenu, setShowLanguageMenu] = useState(false);
-  const collectionManagerRef = useRef<HTMLDivElement>(null); // Renamed ref
+  const tagManagerRef = useRef<HTMLDivElement>(null);
   const languageMenuRef = useRef<HTMLDivElement>(null);
   
   const { 
     selectedFonts, 
+    // moveSelectedFonts, // Not used directly here anymore
     exportSelectedFonts, 
     copySelectedFontNames,
     fonts,
-    bulkUpdateTags, // Keep internal action name
+    bulkUpdateTags,
     bulkSetLanguage 
   } = useFontStore();
 
-  useClickOutside(collectionManagerRef, () => setShowCollectionManager(false)); // Use correct ref name
+  useClickOutside(tagManagerRef, () => setShowTagManager(false));
   useClickOutside(languageMenuRef, () => setShowLanguageMenu(false));
 
   // Calculate selected unique font families
@@ -78,21 +80,21 @@ export const SelectionMenuBar: React.FC<SelectionMenuBarProps> = ({ allCategorie
 
   const selectedFamiliesCount = selectedFamilies.size;
 
-  // Get the first selected font to pass context
+  // Get the first selected font to pass context to FontTagManager
   const firstSelectedFont = useMemo(() => {
   if (selectedFonts.size === 0) return null;
     const firstSelectedId = Array.from(selectedFonts)[0]; // Get first ID from set
     return fonts.find(f => (f.postscriptName || f.fullName) === firstSelectedId) || null;
   }, [selectedFonts, fonts]);
 
-  // Handler for FontCollectionManager updates
-  const handleBulkCollectionUpdate = (fontContext: Font, newCollections: string[]) => { // Renamed
+  // Handler for FontTagManager updates (uses bulk action)
+  const handleBulkTagUpdate = (fontContext: Font, newTags: string[]) => {
     // fontContext is just used for tag comparison, bulkUpdateTags works on selection
-    const currentCollections = fontContext.tags || []; // Still uses internal 'tags'
-    const collectionsToAdd = newCollections.filter(collection => !currentCollections.includes(collection));
-    const collectionsToRemove = currentCollections.filter(collection => !newCollections.includes(collection));
-    bulkUpdateTags(collectionsToAdd, collectionsToRemove); // Use internal action name
-    setShowCollectionManager(false); // Use renamed state setter
+    const currentTags = fontContext.tags || [];
+    const tagsToAdd = newTags.filter(tag => !currentTags.includes(tag));
+    const tagsToRemove = currentTags.filter(tag => !newTags.includes(tag));
+    bulkUpdateTags(tagsToAdd, tagsToRemove);
+    setShowTagManager(false); // Close manager after update
   };
 
   // Handler for Language selection (uses bulk action)
@@ -112,63 +114,60 @@ export const SelectionMenuBar: React.FC<SelectionMenuBarProps> = ({ allCategorie
       </div>
       
       <div className="flex items-center gap-2 w-full sm:w-auto sm:ml-auto flex-wrap sm:flex-nowrap">
-        {/* Collections Button */}
-        <div className="relative">
-          <button 
-            onClick={() => setShowCollectionManager(!showCollectionManager)}
-            className="w-full sm:w-auto flex items-center justify-center gap-1 px-3 py-1.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors"
-            title="Add to Collection"
-          >
-            <Folder size={16} />
-            <span>Collections</span>
-            <ChevronDown size={14} className="ml-1 opacity-50" />
-          </button>
-          
-          {showCollectionManager && selectedFonts.size > 0 && firstSelectedFont && (
-            <div className="absolute z-10 mt-1 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 animate-fadeIn">
-              <FontCollectionManager
-                font={firstSelectedFont}
-                allCategories={allCategories}
-                onUpdateCollection={handleBulkCollectionUpdate}
-              />
-            </div>
-          )}
-        </div>
-
-        {/* Language Selector Button & Popover */}
         {/* Tag Manager Button & Popover - Render only if a font context exists */}
         {firstSelectedFont && (
-          <div className="relative flex-grow sm:flex-grow-0" ref={languageMenuRef}>
+          <div className="relative flex-grow sm:flex-grow-0" ref={tagManagerRef}>
             <button
-              onClick={() => setShowLanguageMenu(!showLanguageMenu)}
+              onClick={() => setShowTagManager(!showTagManager)}
               className="w-full sm:w-auto flex items-center justify-center gap-1 px-3 py-1.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors"
             >
-              <Globe size={16} />
-              {/* Consider showing "Multiple" if languages differ? */}
-              <span>Language</span> 
-              <ChevronDown size={14} className="ml-1 opacity-50" />
+              <Tag size={16} />
+              <span>Tags</span>
             </button>
             
-            {showLanguageMenu && (
-              <div className="absolute z-20 mt-1 right-0 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 animate-fadeIn max-h-60 overflow-y-auto">
-                <div className="p-2 space-y-2">
-                   <div className="px-2 py-1 bg-gray-100 dark:bg-gray-600 rounded-t-md -mt-0.5 -mx-0.5 text-xs font-medium text-gray-500 dark:text-gray-300">Select Language</div>
-                   <div className="max-h-60 overflow-y-auto pr-1 space-y-0.5">
-                      {Object.keys(LANGUAGE_SAMPLES).map((lang) => (
-                    <button
-                          key={lang}
-                          onClick={() => handleLanguageSelect(lang)}
-                          className="w-full text-left px-2 py-1 text-sm text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-gray-600 focus:bg-blue-50 dark:focus:bg-gray-600 focus:outline-none rounded"
-                    >
-                          {lang}
-                    </button>
-                  ))}
-                   </div>
-                </div>
+            {showTagManager && (
+              <div className="absolute z-20 mt-1 w-64 bg-white dark:bg-gray-800 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 animate-fadeIn" style={{ right: 0 }}> {/* Position right */}
+                <FontTagManager
+                  font={firstSelectedFont} // Pass first selected font for context
+                  allCategories={allCategories} // Pass all categories
+                  onUpdateTags={handleBulkTagUpdate} // Use bulk update handler
+                />
               </div>
             )}
           </div>
         )}
+
+        {/* Language Selector Button & Popover */}
+        <div className="relative flex-grow sm:flex-grow-0" ref={languageMenuRef}>
+          <button
+            onClick={() => setShowLanguageMenu(!showLanguageMenu)}
+            className="w-full sm:w-auto flex items-center justify-center gap-1 px-3 py-1.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors"
+          >
+            <Globe size={16} />
+            {/* Consider showing "Multiple" if languages differ? */}
+            <span>Language</span> 
+            <ChevronDown size={14} className="ml-1 opacity-50" />
+          </button>
+          
+          {showLanguageMenu && (
+            <div className="absolute z-20 mt-1 right-0 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 animate-fadeIn max-h-60 overflow-y-auto">
+              <div className="p-2 space-y-2">
+                 <div className="px-2 py-1 bg-gray-100 dark:bg-gray-600 rounded-t-md -mt-0.5 -mx-0.5 text-xs font-medium text-gray-500 dark:text-gray-300">Select Language</div>
+                 <div className="max-h-60 overflow-y-auto pr-1 space-y-0.5">
+                    {Object.keys(LANGUAGE_SAMPLES).map((lang) => (
+                  <button
+                        key={lang}
+                        onClick={() => handleLanguageSelect(lang)}
+                        className="w-full text-left px-2 py-1 text-sm text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-gray-600 focus:bg-blue-50 dark:focus:bg-gray-600 focus:outline-none rounded"
+                  >
+                        {lang}
+                  </button>
+                ))}
+                 </div>
+              </div>
+            </div>
+          )}
+        </div>
 
         {/* Copy Names Button */}
         <button
