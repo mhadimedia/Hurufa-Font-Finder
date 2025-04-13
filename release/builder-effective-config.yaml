@@ -1,0 +1,32 @@
+directories:
+  output: release
+  buildResources: build
+appId: com.fontorganizer.app
+productName: Font Organizer
+mac:
+  category: public.app-category.utilities
+  target:
+    - dmg
+    - zip
+  hardenedRuntime: true
+  gatekeeperAssess: false
+  entitlements: build/entitlements.mac.plist
+  entitlementsInherit: build/entitlements.mac.plist
+win:
+  target:
+    - nsis
+    - zip
+linux:
+  target:
+    - AppImage
+    - deb
+    - rpm
+files:
+  - filter:
+      - dist/**/*
+      - dist-electron/**/*
+publish:
+  provider: github
+  owner: mhadimedia
+  repo: hurufa-font-organizer
+electronVersion: 29.4.6

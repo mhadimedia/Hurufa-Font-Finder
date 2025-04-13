@@ -1,3 +1,65 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Prevent text selection globally */
+* {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Allow text selection only in specific elements */
+.selectable-text {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+/* Prevent text selection during drag */
+.dragging * {
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+}
+
+/* Window drag region */
+.app-drag-region {
+  -webkit-app-region: drag;
+  app-region: drag;
+}
+
+/* Modern focus styles for inputs and selects */
+input:focus, textarea:focus, select:focus {
+  @apply outline-none ring-2 ring-blue-500 ring-opacity-50 border-blue-500;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
+}
+
+/* Override any browser default focus styles with our own */
+input, textarea, select {
+  @apply focus:outline-none;
+}
+
+/* Override any orange focus colors (which may be coming from browser defaults) */
+input, textarea, select {
+  @apply focus:ring-blue-500 focus:border-blue-500;
+}
+
+/* Fix selection color */
+.font-card.selected,
+.font-card:has([aria-selected="true"]),
+*[aria-selected="true"] {
+  @apply ring-2 ring-blue-500 ring-opacity-70 !important;
+  border-color: rgb(59, 130, 246) !important;
+  outline-color: rgb(59, 130, 246) !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3) !important;
+}
+
+/* Remove any orange outlines and rings */
+*:focus, *:focus-visible {
+  @apply outline-none ring-blue-500 ring-opacity-50 !important;
+  outline-color: rgb(59, 130, 246) !important;
+}

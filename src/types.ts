@@ -1,6 +1,7 @@
 export enum CategoryType {
   TAG = 'tag',
   LANGUAGE = 'language',
+  SEARCH = 'search',
   // Add more category types here in the future
 }
 

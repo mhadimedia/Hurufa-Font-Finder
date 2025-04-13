@@ -34,3 +34,5 @@ yarn-error.log*
 
 # Electron-builder output
 dist_electron/
+release/mac-arm64/Font Organizer.app/Contents/Frameworks/Electron Framework.framework/Electron Framework
+release/mac-arm64/Font Organizer.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Electron Framework
