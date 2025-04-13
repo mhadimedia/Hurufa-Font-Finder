@@ -25,6 +25,15 @@ var import_electron = require("electron");
 var import_preferences = require("./preferences");
 import_electron_updater.autoUpdater.autoDownload = false;
 import_electron_updater.autoUpdater.autoInstallOnAppQuit = true;
+import_electron_updater.autoUpdater.allowDowngrade = true;
+import_electron_updater.autoUpdater.allowPrerelease = false;
+import_electron_updater.autoUpdater.disableWebInstaller = false;
+import_electron_updater.autoUpdater.requiresUpdateClientCertificate = false;
+import_electron_updater.autoUpdater.isUpdaterActive = () => true;
+import_electron_updater.autoUpdater.forceDevUpdateConfig = true;
+import_electron_updater.autoUpdater.logger = console;
+import_electron_updater.autoUpdater.verifyUpdateCodeSignature = false;
+import_electron_updater.autoUpdater.signatureVerificationDisabled = true;
 const preferences = (0, import_preferences.getPreferences)();
 setInterval(() => {
   import_electron_updater.autoUpdater.checkForUpdates();

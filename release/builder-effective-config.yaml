@@ -1,21 +1,30 @@
 directories:
   output: release
   buildResources: build
-appId: com.fontorganizer.app
-productName: Font Organizer
+appId: com.hurufa.fontfinder
+productName: Hurufa
 mac:
   category: public.app-category.utilities
   target:
     - dmg
     - zip
+  icon: src/assets/icons/icon.icns
   hardenedRuntime: true
   gatekeeperAssess: false
   entitlements: build/entitlements.mac.plist
   entitlementsInherit: build/entitlements.mac.plist
+  artifactName: ${productName}-${version}-${arch}.${ext}
+  strictVerify: false
+  identity: null
+  asarUnpack: '**/node_modules/**/*.node'
+  minimumSystemVersion: 10.13.0
+  darkModeSupport: true
+  notarize: false
 win:
   target:
     - nsis
     - zip
+  icon: src/assets/icons/icon.ico
 linux:
   target:
     - AppImage
@@ -28,5 +37,5 @@ files:
 publish:
   provider: github
   owner: mhadimedia
-  repo: hurufa-font-organizer
+  repo: Hurufa-Font-Finder
 electronVersion: 29.4.6
