@@ -6,6 +6,7 @@ node_modules/
 # Production
 dist/
 build/
+dist-electron/
 
 # Testing
 coverage/
@@ -34,5 +35,10 @@ yarn-error.log*
 
 # Electron-builder output
 dist_electron/
-release/mac-arm64/Font Organizer.app/Contents/Frameworks/Electron Framework.framework/Electron Framework
-release/mac-arm64/Font Organizer.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Electron Framework
+release/
+!release/builder-effective-config.yaml
+!release/latest-mac.yml
+
+# Font files
+.otf
+.ttf
